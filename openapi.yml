@@ -64,11 +64,94 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Artikel'
+  /artikel/{aid}:
+    parameters:
+      - in: path
+        name: aid
+        schema:
+          type: string
+        required: true
+    get:
+      tags:
+        - Shop
+      summary: Gebe einen Artikel zurück
+      description: Ein Artikel wird zurück gegeben
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artikel'
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Artikel'
+      tags:
+        - Shop
+      summary: Ändere einen Artikel
+      description: Ein Artikel wird geändert
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artikel'
+        '4XX':
+          description: Client Errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '5XX':
+          description: Server Errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+    delete:
+      tags:
+        - Shop
+      summary: Lösche einen Artikel
+      description: Ein Artikel wird gelöscht
+      responses:
+        '200':
+          description: ok
           
-          
+    patch:
+      tags:
+        - Shop
+      summary: Aktualisiere entweder den Namen oder den Preis eines Artikels
+      description: | 
+        Ermöglicht die teilweise Aktualisierung eines Artikels. 
+        Nur die Felder, die aktualisiert werden sollen, müssen im Request-Body enthalten sein.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtikelPatch'
+      responses:
+        '200':
+          description: Artikel erfolgreich aktualisiert
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artikel'
+        '4XX':
+          description: Client Errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+    
 components:
   schemas:
     Artikel:
+      type: object
       properties:
         name:
           type: string
@@ -83,4 +166,34 @@ components:
       required:
         - name
         - preis
+    ErrorMessage:
+      type: object
+      properties:
+        developer-message:
+          type: string
+          maxLength: 2000
+          example: Beschreibung des Client Fehlers in verständlicher Form.
+          description: Beschreibung des Fehlers
+        timestamp:
+          type: string
+          format: date-time
+          maxLength: 200
+        user-message:
+          type: string
+          maxLength: 2000
+          example: UserMsg
+          description: userMsg
+    ArtikelPatch:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          example: Neue Grapefruit
+        preis:
+          type: number
+          minimum: 0 
+          example: 1.49
+      additionalProperties: false
+          
           
