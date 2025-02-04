@@ -1,0 +1,86 @@
+openapi: '3.0.3'
+info:
+  title: katalog API
+  version: '1.0'
+  description: Katalog API
+servers:
+  - url: https://virtserver.swaggerhub.com/predic/katalog/1
+paths:
+  /artikel/:
+    get:
+      tags:
+        - Shop
+      summary: Gebe mir alle Artikel zurück
+      description: Liefert alle Artikel zurück
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Artikel'
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Artikel'
+      tags:
+        - Shop
+      summary: Hiermit wird ein Artikel erstellt.
+      description: | 
+        # Ein Artikel wird erstellt.
+        
+        ## Dieser Endpunkt ist dazu da, um Artikel zu erstellen. Ein Artikel besteht aus:
+        
+        - Name
+        - Preis
+        
+        Inline-style: 
+        ![alt text](https://s3.eu-west-1.amazonaws.com/redsys-prod/articles/43c734f0791ad5a9f6fe6131/images/eschhold_softwarearchitektur2_2.tif_fmt1.jpg "Logo Title Text 1")
+        
+        | Tables        | Are           | Cool  |
+        | ------------- |:-------------:| -----:|
+        | col 3 is      | right-aligned | $1600 |
+        | col 2 is      | centered      |   $12 |
+        | zebra stripes | are neat      |    $1 |
+
+        
+        
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              description: URI des neuen Artikels
+              schema:
+                type: string
+                maxLength: 200
+                format: uri
+                example: https://api.myCompany.com/shop/v2/artikel/<123>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artikel'
+          
+          
+components:
+  schemas:
+    Artikel:
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          example: Grapefruit
+          description: Dies ist der Name des Artikels
+        preis:
+          type: number
+          minimum: 0 
+          example: 0.99
+          description: Dies ist der Preis des Artikels
+      required:
+        - name
+        - preis
+          
